@@ -1467,6 +1467,18 @@ body.is-window-dragging * {
   .files__sidebar {
     display: none;
   }
+  /* Backdrop blur cost grows with its radius and is redone every frame the
+     universe animates behind it — keep it light on phone GPUs. The glass is
+     mostly opaque, so the look barely changes. */
+  .menubar,
+  .dock__list,
+  .region-label {
+    backdrop-filter: blur(8px);
+  }
+  .os-window.is-mobile,
+  .palette__panel {
+    backdrop-filter: blur(12px) saturate(1.2);
+  }
 }
 
 /* ───────────────────────── Motion ───────────────────────── */
@@ -1506,17 +1518,92 @@ body.is-window-dragging * {
   .welcome.is-visible {
     transform: none;
   }
+  .welcome__eyebrow {
+    margin-bottom: 0.75rem;
+  }
+  /* Size the headline by height too, so short phones keep room above the
+     text for the black hole. */
+  .welcome__name {
+    font-size: clamp(3.5rem, 11vh, 5rem);
+  }
   .welcome__tagline {
-    margin-top: 1rem;
+    margin: 0.9rem 0 0.75rem;
   }
   .welcome__roles {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.1rem;
+    font-size: 11px;
+  }
+  .welcome .welcome__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0;
+  }
+  .welcome .welcome__actions > :first-child {
+    grid-column: 1 / -1;
+  }
+  .welcome .welcome__actions .btn {
+    justify-content: center;
+    height: 42px;
+    padding: 0 0.75rem;
   }
   .skip-btn {
     bottom: 24px;
   }
   .system-hud {
     bottom: 22vh;
+  }
+}
+
+/* Short phones (SE-class): drop the secondary lines so the black hole stays clear. */
+@media (max-width: 760px) and (max-height: 620px) {
+  .welcome__eyebrow,
+  .welcome__roles {
+    display: none;
+  }
+  .welcome__tagline {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Phones in landscape: the black hole is framed on the right, so keep the
+   welcome compact in the top-left. Touch-only, so desktop windows never match. */
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+  .welcome {
+    top: 52px;
+    bottom: auto;
+    right: auto;
+    left: var(--gutter);
+    max-width: min(46vw, 420px);
+    transform: translateY(12px);
+  }
+  .welcome.is-visible {
+    transform: none;
+  }
+  .welcome__eyebrow,
+  .welcome__roles {
+    display: none;
+  }
+  .welcome__name {
+    font-size: clamp(2.75rem, 16vh, 4.5rem);
+  }
+  .welcome__tagline {
+    margin: 0.6rem 0 0.8rem;
+    font-size: 1.1rem;
+  }
+  .welcome .welcome__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 0;
+  }
+  .welcome .welcome__actions > :first-child {
+    grid-column: 1 / -1;
+  }
+  .welcome .welcome__actions .btn {
+    justify-content: center;
+    height: 40px;
+    padding: 0 0.75rem;
   }
 }
 

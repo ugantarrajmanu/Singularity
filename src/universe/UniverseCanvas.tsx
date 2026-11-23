@@ -80,7 +80,7 @@ function RenderGate() {
  */
 export default function UniverseCanvas() {
   const tier = useQualityTier();
-  const [dpr, setDpr] = useState(tier.dpr[1]);
+  const [dpr, setDpr] = useState(tier.initialDpr);
   const setRenderMode = useBootStore((s) => s.setRenderMode);
   const interactive = () => isInteractive(useBootStore.getState().phase);
 
@@ -113,7 +113,7 @@ export default function UniverseCanvas() {
         <Suspense fallback={null}>
           <Backdrop stars={tier.stars} />
           <ParticleField count={tier.particles} />
-          {CORE_STYLE === "blackhole" ? <BlackHole steps={tier.name === "low" ? 120 : 220} /> : <EnergyCore detail={tier.coreDetail} />}
+          {CORE_STYLE === "blackhole" ? <BlackHole steps={tier.name === "high" ? 220 : 120} lite={tier.liteCore} /> : <EnergyCore detail={tier.coreDetail} />}
           {ENABLE_HAZE && <CosmicHaze />}
           <UniverseEnvironment />
           <CameraController />

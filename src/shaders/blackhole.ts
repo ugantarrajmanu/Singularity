@@ -44,7 +44,13 @@ vec4 shadeDisk(vec3 hit, float rr, vec3 dir) {
   // Keplerian shear: inner plasma orbits much faster.
   float swirl = ang + uTime * (0.45 + uTurbulence * 0.8) * pow(uInner / rr, 1.5) * 2.0;
   vec3 q = vec3(cos(swirl) * rr, sin(swirl) * rr, uTime * 0.07);
+#ifdef LITE
+  // Mobile: two octaves (amplitudes ≈ fbm's range) — indistinguishable at phone DPR.
+  vec3 q1 = q * 1.15;
+  float n = 0.6 * snoise(q1) + 0.3 * snoise(q1 * 2.03);
+#else
   float n = fbm(q * 1.15);
+#endif
   // Plasma veins borrowed from the energy core.
   float veins = pow(1.0 - abs(snoise(q * 2.4 + vec3(0.0, 0.0, uTime * 0.2))), 5.0);
   float lanes = 0.75 + 0.25 * sin(rr * 13.0 + n * 6.0);

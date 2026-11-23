@@ -18,7 +18,7 @@ const camLocal = new Vector3();
  * Driven by the same bootParams as the energy core, so the boot timeline,
  * expansion and formation work unchanged.
  */
-export function BlackHole({ steps = 220 }: { steps?: number }) {
+export function BlackHole({ steps = 220, lite = false }: { steps?: number; lite?: boolean }) {
   const group = useRef<Group>(null);
   const volume = useRef<Mesh>(null);
   const halo = useRef<Mesh>(null);
@@ -28,7 +28,7 @@ export function BlackHole({ steps = 220 }: { steps?: number }) {
       new ShaderMaterial({
         vertexShader: blackHoleVertex,
         fragmentShader: blackHoleFragment,
-        defines: { STEPS: steps },
+        defines: lite ? { STEPS: steps, LITE: 1 } : { STEPS: steps },
         side: BackSide, // back faces render whether the camera is inside or outside
         transparent: true,
         premultipliedAlpha: true,
@@ -51,7 +51,7 @@ export function BlackHole({ steps = 220 }: { steps?: number }) {
           uLavender: { value: new Color(PALETTE.lavender) },
         },
       }),
-    [steps],
+    [steps, lite],
   );
 
   const haloMat = useMemo(

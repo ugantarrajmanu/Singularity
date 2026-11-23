@@ -98,7 +98,9 @@ export function getRegionView(id: SystemRegion, aspect: number): CameraView {
   // Core: structure on the right (identity text on the left).
   // Others: structure on the left (panel on the right).
   const sideShift = narrow ? 0 : id === "core" ? -3.4 : 3.6;
-  const verticalShift = narrow ? -2.2 : 0;
+  // Portrait: subject above the text. The core sits higher so the welcome
+  // block (bottom of the screen) never covers the black hole.
+  const verticalShift = narrow ? (id === "core" ? -4.6 : -2.2) : 0;
 
   return {
     position: [px + ox * pull, py + oy * pull, pz + oz * pull],
